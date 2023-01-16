@@ -1,0 +1,23 @@
+.input-group-text {
+    background-color: #e9ecef;
+}
+
+.form-control {
+    transition: all 0.25s ease-in-out;
+}
+
+.form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+button[type="submit"] {
+    transition: all 0.25s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background-color: #007bff;
+}
+
+.container {
+    margin-top: 50px;
+}

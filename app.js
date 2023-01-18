@@ -6,18 +6,27 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
-const { User } = require('./models');
+const pg = require('pg');
 
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/acadly', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+const client = new pg.Client({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'your_database',
+    password: 'password',
+    port: 5432,
 });
 
-const db = mongoose.connection;
-mongoose.connection.once('open', function () {
-    console.log("Connected to MongoDB");
+// try connecting the client to postgres
+client.connect((err) => {
+    if (err) {
+        console.error('connection error', err.stack)
+    } else {
+        console.log('connected')
+    }
 });
+
+
+
 
 app.use(session({
     secret: 'mySecretKey',
@@ -25,16 +34,13 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-const routes = require('./routes');
+const router = require('./routes/router');
+app.use('/', router);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
 
-app.use('/', routes);
 
-app.get('/', (req, res) => {
-    res.send('Hello, Welcome to my website!');
-});
 
 
 
@@ -95,12 +101,12 @@ app.post('/otp-verification', (req, res) => {
     if (enteredOtp == sessionOtp) {
         delete req.session.otp;
         //Check if the email is already registered on MongoDB database
-        const existingUser = checkIfUserExists(email);
-        if (existingUser) {
-            res.redirect('/');
-        } else {
-            res.redirect('/register');
-        }
+        // const existingUser = checkIfUserExists(email);
+        // if (existingUser) {
+        //     res.redirect('/');
+        // } else {
+        //     res.redirect('/register');
+        // }
     } else {
         res.redirect('/login?error=invalid-otp');
     }
@@ -145,7 +151,7 @@ function generateOTP() {
 // Function for validating email address
 function validateEmail(email) {
     // Regular expression for validating email
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^(([^<>$()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
 }
 

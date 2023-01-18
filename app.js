@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
+const { User } = require('./models');
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/acadly', {
@@ -49,7 +50,7 @@ app.post('/login', async (req, res) => {
 
     // Send OTP to user's email
     const mailOptions = {
-        from: 'agg.aditya@outlook.com',
+        from: 'academicsonline@outlook.com',
         to: email,
         subject: 'OTP for login',
         text: `Your OTP for login is ${otp}`
@@ -133,7 +134,7 @@ app.post('/register', (req, res) => {
 //Helper Functions
 
 async function checkIfUserExists(email) {
-    const existingUser = await collection.findOne({ email });
+    const existingUser = await User.findOne({ email });
     // rest of your code here
 }
 
@@ -156,8 +157,8 @@ async function sendEmail(mailOptions) {
         port: 587,
         secure: false,
         auth: {
-            user: 'agg.aditya@outlook.com',
-            pass: 'Aditya@9087'
+            user: 'academicsonline@outlook.com',
+            pass: 'acad@123'
         }
     });
 

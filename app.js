@@ -6,6 +6,41 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+
+const start = async () => {
+    
+    try {
+        const uri = "mongodb+srv://admin:acad%40123@acaddatabase.esyhw8q.mongodb.net/?retryWrites=true&w=majority";
+
+
+        const connectionParams={
+            useNewUrlParser: true,
+            useUnifiedTopology: true 
+        }
+await MongoClient.connect(uri,connectionParams)
+    .then( () => {
+        console.log('Connected to the database ')
+    })
+    .catch( (err) => {
+        console.error(`Error connecting to the database. n${err}`);
+    })
+
+
+       
+    } catch (err) {
+        throw new DbConnectionError();
+        console.error(err);
+    }
+
+    
+};
+
+start();
+
+
+
 
 
 
@@ -16,7 +51,9 @@ app.use(session({
 }));
 
 const router = require('./routes/router');
+const signup = require('./routes/users');
 app.use('/', router);
+app.use('/signup',signup);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 

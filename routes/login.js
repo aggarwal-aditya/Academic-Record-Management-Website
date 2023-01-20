@@ -2,6 +2,7 @@ const { User, validate } = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
+const session = require('express-session');
 router.post('/', async (req, res) => {
     // Validate user's email
     const email = req.body.email;
@@ -37,27 +38,36 @@ router.post('/', async (req, res) => {
 
     // Store OTP and email in user's session
     req.session.otp = otp;
-    req.session.email = email;
+    
     req.session.otpExpires = Date.now() + 15 * 60 * 1000; // OTP expires in 15 minutes
     return res.status(200).send('OTP sent successfully');
 });
 
 
-router.post('/otp-verification', (req, res) => {
+router.post('/otp-verification',async (req, res) => {
     if (req.session.otpExpires < Date.now()) {
         return res.status(410).send('OTP Expired');
     }
     // get the OTP from the form
     const enteredOtp = req.body.otp;
 
-    const email = req.session.email;
+    const email = req.body.email;
     // get the OTP from the session
     const sessionOtp = req.session.otp;
 
     // check if the OTPs match
     if (enteredOtp == sessionOtp) {
         delete req.session.otp;
-        return res.status(200).send('OK User logged In');
+        let user = await User.findOne({ email: req.body.email });
+        if (!user)
+        {
+            return res.status(401).send('UNAUTHORISED: The email is not registered');
+        }
+
+        req.session.email = email;
+        req.session.role=user.role;
+        req.session.name=user.name;
+        return res.status(200).send('OK '+user.role+' Logged In');
         //Check if the email is already registered on MongoDB database
         // const existingUser = checkIfUserExists(email);
         // if (existingUser) {

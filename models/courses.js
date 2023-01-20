@@ -25,7 +25,6 @@ const Course = mongoose.model('Course', new mongoose.Schema({
         required: true,
         minlength: 3,
         maxlength: 255,
-        unique: true
     }
 }));
 

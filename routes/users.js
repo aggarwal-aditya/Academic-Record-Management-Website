@@ -18,7 +18,8 @@ router.post('/', async (req, res) => {
         user = new User({
             name: req.body.name,
             email: req.body.email,
-            role: req.body.role
+            role: req.body.role,
+            advisor: req.body.advisor
         });
         await user.save();
         res.send(user);

@@ -54,9 +54,11 @@ app.use(session({
 const router = require('./routes/router');
 const signup = require('./routes/users');
 const login = require('./routes/login');
+const instructor = require('./routes/instructor');
 app.use('/', router);
 app.use('/login',login)
 app.use('/signup',signup);
+app.use('/instructor',instructor)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 

@@ -1,4 +1,6 @@
 const { Course, validate } = require('../models/courses');
+const {courseticket} = require('../models/courseticket');
+const {User} = require('../models/user');
 const express = require('express');
 const router = express.Router();
 
@@ -30,6 +32,24 @@ router.post('/addcourse', async (req, res) => {
     }
 });
 
+router.get('/pending' , async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role!='instructor' )
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    tickets = await courseticket.find({pendingat: req.session.email});
+    tosend=[];
+    for (i=0;i<tickets.length;i++)
+    {
+        studentmail = tickets[i].studentmail;
+        studentname = await User.findOne({email: studentmail});
+        tosend.push(tickets[i].toObject());
+        tosend[i].studentname = studentname.name;
+    }
+
+    return res.send(tosend);
+});
 
 module.exports = router;
  

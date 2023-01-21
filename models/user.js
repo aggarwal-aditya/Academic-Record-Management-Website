@@ -38,7 +38,8 @@ function validate(user) {
     const schema = Joi.object({
         name: Joi.string().min(1).max(50).required(),
         email: Joi.string().min(3).max(255).required().email(),
-        role: Joi.string().min(1).max(255).required()
+        role: Joi.string().min(1).max(255).required(),
+        advisor: Joi.string().min(3).max(255).required().email()
     });
     return schema.validate(user);
 }

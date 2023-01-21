@@ -83,5 +83,40 @@ router.post('/approve', async (req, res) => {
     return res.send(ticket);
 });
 
+router.post('/reject', async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role!='instructor' )
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    ticket = await courseticket.findOne({"_id": ObjectID( req.body._id)});
+    if (!ticket)
+    {
+        return res.status(404).send("No such ticket exists");
+    }
+    course = await Course.findOne({code: ticket.code});
+    
+    offeredby = course.instructormail;
+    student = await User.findOne({email: ticket.studentmail});
+    advisor = student.advisor;
+    if (ticket.pendingat!=req.session.email && offeredby!=req.session.email && advisor!=req.session.email)
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    if (ticket.status=='Pending Instructor Approval' || offeredby==req.session.email)
+    {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Instructor Rejected';
+        await ticket.save();
+    }
+    else if (ticket.status=='Pending Advisor Approval' || advisor==req.session.email)
+    {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Advisor Rejected';
+        await ticket.save();
+    }
+    return res.send(ticket);
+});
+
 module.exports = router;
  

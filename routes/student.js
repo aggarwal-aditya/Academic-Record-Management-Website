@@ -1,4 +1,6 @@
-const { Course, validate } = require('../models/courses');
+const { courseticket, validate } = require('../models/courseticket');
+const Course = require('../models/courses')
+const User = require('../models/user')
 const express = require('express');
 const router = express.Router();
 
@@ -15,18 +17,24 @@ router.post('/enrol', async (req, res) => {
 
     // Check if this user already exisits
     let course = await Course.findOne({ code: req.body.code });
-    if (course) {
-        return res.status(400).send('Course already Exists');
+    if (!course) {
+        return res.status(400).send('No such course exists');
     } else {
         // Insert the new user if they do not exist yet
-        course = new Course({
-            name: req.body.name,
-            code: req.body.code,
-            instructormail: req.session.email
+        ticket = new courseticket({
+            name: course.name,
+            code: course.code,
+            studentmail: req.session.email,
+            pendingat: course.instructormail,
+            status: 'Pending Instructor Approval'
             
         });
-        await course.save();
-        res.send(course);
+        const { error } = validate(courseticket);
+        if (error) {
+            return res.status(400).send(error.details[0].message);
+        }
+        await courseticket.save();
+        res.send(courseticket);
     }
 });
 

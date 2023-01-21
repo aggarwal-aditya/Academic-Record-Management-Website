@@ -6,7 +6,7 @@ mongoose.connect(uri);
 
 
 
-const Course = mongoose.model('Course', new mongoose.Schema({
+const courseticket = mongoose.model('courseticket', new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -20,22 +20,37 @@ const Course = mongoose.model('Course', new mongoose.Schema({
         maxlength: 5,
         unique: true
     },
-    instructormail:{
+    studentmail:{
         type: String,
         required: true,
         minlength: 3,
         maxlength: 255,
         unique: true
+    },
+    pendingat:{
+        type: String,
+        minlength: 3,
+        maxlength: 255,
+    }
+    ,
+    status:{
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 255
     }
 }));
 
 function validate(course) {
     const schema = Joi.object({
         name: Joi.string().min(1).max(100).required(),
-        code: Joi.string().min(5).max(5).required()
+        code: Joi.string().min(5).max(5).required(),
+        studentmail: Joi.string().min(3).max(255).required().email(),
+        pendingat: Joi.string().min(3).max(255).required().email(),
+        status: Joi.string().min(1).max(255).required()
     });
-    return schema.validate(course);
+    return schema.validate(courseticket);
 }
 
-exports.Course = Course;
+exports.courseticket = courseticket;
 exports.validate = validate;

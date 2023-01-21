@@ -8,3 +8,4 @@ create a new email for yourself to test this code. Add the passowrd and email in
 - /login: send email at this route. Otp will be sent.
 - login/otp-verification: Send email and otp entered by the user. Receive success or failure messege. If the user is not registered, receive an http response with error code 401.
 - /instructor/addcourse: takes name and code. code must be 5 chars long. Adds the course with the mail of instructor
+- /courses : Takes two optional parameter instructormail(email of instructor), listofcodes(array containing list of courses codes(strings) to be searched). Returns all courses that match the criteria. Not giving parameter means return all.

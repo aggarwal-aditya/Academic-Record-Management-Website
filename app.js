@@ -61,12 +61,16 @@ const router = require('./routes/router');
 const signup = require('./routes/users');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
+const courses = require('./routes/courses');
 const instructor = require('./routes/instructor');
+const student = require('./routes/student');
 app.use('/', router);
 app.use('/login',login);
 app.use('/logout',logout)
+app.use('/courses',courses);
 app.use('/signup',signup);
-app.use('/instructor',instructor)
+app.use('/instructor',instructor);
+app.use('/student',student);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 

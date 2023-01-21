@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
 
     // Send OTP to user's email
     const mailOptions = {
-        from: 'academicsonline@outlook.com',
+        from: 'a@skhan-IDEAPAD-GAMING-3-15IMH05',
         to: email,
         subject: 'OTP for login',
         text: `Your OTP for login is ${otp}`
@@ -103,13 +103,12 @@ function validateEmail(email) {
 async function sendEmail(mailOptions) {
     // Configure nodemailer
     const transporter = nodemailer.createTransport({
-        host: 'smtp-mail.outlook.com',
-        port: 587,
-        secure: false,
-        auth: {
-            user: 'academicsonline@outlook.com',
-            pass: 'acad@123'
-        }
+        service: 'postfix',
+  host: 'localhost',
+  secure: false,
+  port: 25,
+  auth: { user: 'skhan', pass: '1603' },
+  tls: { rejectUnauthorized: false }
     });
 
     // Send email

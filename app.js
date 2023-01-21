@@ -4,15 +4,17 @@ const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const { MongoClient, ServerApiVersion } = require('mongodb');
-
+const uri = "mongodb+srv://admin:acad%40123@acaddatabase.esyhw8q.mongodb.net/?retryWrites=true&w=majority";
 
 const start = async () => {
     
     try {
-        const uri = "mongodb+srv://admin:acad%40123@acaddatabase.esyhw8q.mongodb.net/?retryWrites=true&w=majority";
+        
 
 
         const connectionParams={
@@ -48,15 +50,21 @@ app.use(session({
     secret: 'mySecretKey',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: oneDay }
+    store: new MongoStore({
+        url: "mongodb+srv://admin:acad%40123@acaddatabase.esyhw8q.mongodb.net/?retryWrites=true&w=majority",
+        ttl: 14 * 24 * 60 * 60,
+        autoRemove: 'native' 
+    })
 }));
 
 const router = require('./routes/router');
 const signup = require('./routes/users');
 const login = require('./routes/login');
+const logout = require('./routes/logout');
 const instructor = require('./routes/instructor');
 app.use('/', router);
-app.use('/login',login)
+app.use('/login',login);
+app.use('/logout',logout)
 app.use('/signup',signup);
 app.use('/instructor',instructor)
 app.set('view engine', 'ejs');

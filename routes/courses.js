@@ -2,6 +2,7 @@
 const express = require('express');
 const { Course} = require('../models/courses');
 const {User} = require('../models/user');
+const {courseticket} = require('../models/courseticket');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -30,6 +31,21 @@ router.get('/', async (req, res) => {
     return res.send(filteredcourses);
 });
 
-
+router.get('/gettickets', async (req, res) => {
+    if (!req.session.role)
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    tickets = await courseticket.find({code: req.body.code});
+    tosend=[];
+    for (i=0;i<tickets.length;i++)
+    {
+        studentmail = tickets[i].studentmail;
+        studentname = await User.findOne({email: studentmail});
+        tosend.push(tickets[i].toObject());
+        tosend[i].studentname = studentname.name;
+    }
+    return res.send(tosend);
+});
 module.exports = router;
  

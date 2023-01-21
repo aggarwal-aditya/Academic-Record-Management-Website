@@ -2,6 +2,7 @@ const { Course, validate } = require('../models/courses');
 const {courseticket} = require('../models/courseticket');
 const {User} = require('../models/user');
 const express = require('express');
+const { ObjectID } = require('bson');
 const router = express.Router();
 
 router.post('/addcourse', async (req, res) => {
@@ -49,6 +50,37 @@ router.get('/pending' , async (req, res) => {
     }
 
     return res.send(tosend);
+});
+
+router.post('/approve', async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role!='instructor' )
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    ticket = await courseticket.findOne({"_id": ObjectID( req.body._id)});
+    if (!ticket)
+    {
+        return res.status(404).send("No such ticket exists");
+    }
+    if (ticket.pendingat!=req.session.email)
+    {
+        return res.status(401).send("Unauthorised");
+    }
+    if (ticket.status=='Pending Instructor Approval')
+    {
+        student = await User.findOne({email: ticket.studentmail});
+        ticket.pendingat = student.advisor;
+        ticket.status = 'Pending Advisor Approval';
+        await ticket.save();
+    }
+    else if (ticket.status=='Pending Advisor Approval')
+    {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Enrolled';
+        await ticket.save();
+    }
+    return res.send(ticket);
 });
 
 module.exports = router;

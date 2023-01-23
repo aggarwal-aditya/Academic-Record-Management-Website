@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,
+					initial-scale=1.0" />
+    <title>Academic Section</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+        integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+
+    <title>Courses</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Request Enrollment</th>
+            <th>Request Drop</th>
+        </tr>
+        <% for (var i=(currentPage - 1) * 5; i < currentPage * 5 && i < courses.length; i++) { %>
+            <tr>
+                <td>
+                    <%= courses[i].code %>
+                </td>
+                <td>
+                    <%= courses[i].name %>
+                </td>
+                <td>
+                    <form action="/enrol" method="post">
+                        <input type="hidden" name="code" value="<%= courses[i].code %>">
+                        <input type="hidden" name="courseName" value="<%= courses[i].name %>">
+                        <input type="submit" class="btn btn-primary" value="Request Enrollment">
+                    </form>
+                </td>
+                <td>
+                    <form action="/drop" method="post">
+                        <input type="hidden" name="code" value="<%= courses[i].code %>">
+                        <input type="hidden" name="courseName" value="<%= courses[i].name %>">
+                        <input type="submit" class="btn btn-primary" value="Drop">
+                    </form>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+    <div>
+        <% if (currentPage> 1) { %>
+            <a href="?page=<%= currentPage - 1 %>">Previous</a>
+            <% } %>
+                <% if (currentPage * 5 < courses.length) { %>
+                    <a href="?page=<%= currentPage + 1 %>">Next</a>
+                    <% } %>
+    </div>
+</body>
+
+</html>

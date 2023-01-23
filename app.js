@@ -54,9 +54,12 @@ app.use(cors())
 const router = require('./routes/router');
 const instructor = require('./routes/instructor');
 const users = require('./routes/users');
+const student = require('./routes/student');
 app.use('/', router);
 app.use('/', instructor)
 app.use('/', users)
+app.use('/', student)
+app.use('/', instructor)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 

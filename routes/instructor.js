@@ -1,5 +1,8 @@
 const { Course, validate } = require('../models/courses');
 const express = require('express');
+const { ObjectID } = require('bson');
+const { courseticket } = require('../models/courseticket');
+const { User } = require('../models/user');
 const router = express.Router();
 
 
@@ -28,6 +31,80 @@ router.post('/addcourse', async (req, res) => {
         await course.save();
         res.send(course);
     }
+});
+router.get('/pending', async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role != 'instructor') {
+        return res.status(401).send("Unauthorised");
+    }
+    const currentPage = parseInt(req.query.page || 1);
+    tickets = await courseticket.find({ pendingat: req.session.email });
+    tosend = [];
+    for (i = 0; i < tickets.length; i++) {
+        studentmail = tickets[i].studentmail;
+        studentname = await User.findOne({ email: studentmail });
+        tosend.push(tickets[i].toObject());
+        tosend[i].studentname = studentname.name;
+    }
+    res.render('approval.ejs', { courses: tosend, currentPage: currentPage });
+
+    // return res.send(tosend);
+});
+
+router.post('/approve', async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role != 'instructor') {
+        return res.status(401).send("Unauthorised");
+    }
+    ticket = await courseticket.findOne({ "_id": ObjectID(req.body._id) });
+    if (!ticket) {
+        return res.status(404).send("No such ticket exists");
+    }
+    if (ticket.pendingat != req.session.email) {
+        return res.status(401).send("Unauthorised");
+    }
+    if (ticket.status == 'Pending Instructor Approval') {
+        student = await User.findOne({ email: ticket.studentmail });
+        ticket.pendingat = student.advisor;
+        ticket.status = 'Pending Advisor Approval';
+        await ticket.save();
+    }
+    else if (ticket.status == 'Pending Advisor Approval') {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Enrolled';
+        await ticket.save();
+    }
+    return res.send(ticket);
+});
+
+router.post('/reject', async (req, res) => {
+    // First Validate The Request
+    if (!req.session.role || req.session.role != 'instructor') {
+        return res.status(401).send("Unauthorised");
+    }
+    ticket = await courseticket.findOne({ "_id": ObjectID(req.body._id) });
+    if (!ticket) {
+        return res.status(404).send("No such ticket exists");
+    }
+    course = await Course.findOne({ code: ticket.code });
+
+    offeredby = course.instructormail;
+    student = await User.findOne({ email: ticket.studentmail });
+    advisor = student.advisor;
+    if (ticket.pendingat != req.session.email && offeredby != req.session.email && advisor != req.session.email) {
+        return res.status(401).send("Unauthorised");
+    }
+    if (ticket.status == 'Pending Instructor Approval' || offeredby == req.session.email) {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Instructor Rejected';
+        await ticket.save();
+    }
+    else if (ticket.status == 'Pending Advisor Approval' || advisor == req.session.email) {
+        ticket.pendingat = "Admin";
+        ticket.status = 'Advisor Rejected';
+        await ticket.save();
+    }
+    return res.send(ticket);
 });
 
 

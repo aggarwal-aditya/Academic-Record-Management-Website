@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
         await Promise.race([
             sendEmail(mailOptions),
             new Promise((resolve, reject) => {
-                setTimeout(() => reject(new Error('Timeout')), 10000) // 10 seconds
+                setTimeout(() => reject(new Error('Timeout')), 100000) // 10 seconds
             })
         ]);
     } catch (err) {

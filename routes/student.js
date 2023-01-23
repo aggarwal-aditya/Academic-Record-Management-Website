@@ -18,9 +18,9 @@ router.post('/enrol', async (req, res) => {
     let course = await Course.findOne({ code: req.body.code });
     let prevticket = await courseticket.findOne({ code: req.body.code, studentmail: req.session.email });
     if (prevticket) {
-        // if (prevticket.status == 'Enrolled') {
-        return res.status(400).send('Already Enrolled');
-        // }
+        if (prevticket.status != 'Dropped by Student') {
+            return res.status(400).send('Already Enrolled');
+        }
         // await prevticket.delete();
     }
     if (!course) {
@@ -86,6 +86,9 @@ router.post('/drop', async (req, res) => {
 
 // Render the template
 router.get('/enrol', async (req, res) => {
+    if (!req.session.role || req.session.role != 'student') {
+        return res.status(401).send("Unauthorised");
+    }
     const currentPage = parseInt(req.query.page || 1);
     const courses = await Course.find({});
     filteredcourses = [];

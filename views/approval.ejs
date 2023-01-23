@@ -40,6 +40,7 @@
             <th>Course ID</th>
             <th>Course Name</th>
             <th>Student Name</th>
+            <th>Status</th>
             <th>Approve</th>
             <th>Reject</th>
         </tr>
@@ -53,6 +54,9 @@
                 </td>
                 <td>
                     <%= courses[i].studentmail %>
+                </td>
+                <td>
+                    <%= courses[i].status %>
                 </td>
                 <td>
                     <form action="/approve" method="post">

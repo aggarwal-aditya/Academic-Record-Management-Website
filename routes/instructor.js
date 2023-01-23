@@ -66,6 +66,7 @@ router.post('/approve', async (req, res) => {
     if (ticket.status == 'Pending Instructor Approval') {
         student = await User.findOne({ email: ticket.studentmail });
         ticket.pendingat = student.advisor;
+        console.log(student);
         ticket.status = 'Pending Advisor Approval';
         await ticket.save();
     }

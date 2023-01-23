@@ -25,17 +25,24 @@ const User = mongoose.model('User', new mongoose.Schema({
         required: true,
         minlength: 1,
         maxlength: 1024
+    },
+    advisor: {
+        type: String,
+        required: false,
+        minlength: 3,
+        maxlength: 255,
     }
 }));
 
-function validateUser(user) {
+function validate(user) {
     const schema = Joi.object({
         name: Joi.string().min(1).max(50).required(),
         email: Joi.string().min(3).max(255).required().email(),
-        role: Joi.string().min(1).max(255).required()
+        role: Joi.string().min(1).max(255).required(),
+        advisor: Joi.string().min(3).max(255).required().email()
     });
     return schema.validate(user);
 }
 
 exports.User = User;
-exports.validate = validateUser;
+exports.validate = validate;

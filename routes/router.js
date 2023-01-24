@@ -15,7 +15,7 @@ router.get('/otp-verification', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-    res.render('home');
+    res.render('home', { session: req.session });
 });
 
 router.get('/addcourse', (req, res) => {

@@ -12,27 +12,35 @@
     <link href="/css/styles.css" rel="stylesheet" type="text/css">
 
 </head>
+<%- include('base') %>
 
-<body>
-    <div class=" jumbotron centered">
-        <div class="container">
-            <i class="fas fa-code fa-6x"></i>
-            <h1 class="display-3">Academic Section</h1>
-            <p class="lead">Study Till You Live</p>
-            <hr>
-            <!-- {% if user.is_authenticated %} -->
-            <!-- {% else %} -->
-            <a class="btn btn-outline-info btn-lg" href="/signup" role="button">Register</a>
-            <a class="btn btn-outline-info btn-lg" href="/login" role="button">Login</a>
-            <br><br>
-            <a class="btn btn-outline-info  btn-lg" href="/about-us" role="button">About Us</a>
-            <!-- {% endif %} -->
-            <!-- <br><br> -->
-            <!-- <a class="btn btn-outline-info btn-lg" href="#" role="button">Add New Questions</a> -->
-
+    <body>
+        <div class=" jumbotron centered">
+            <div class="container">
+                <i class="fas fa-code fa-6x"></i>
+                <h1 class="display-3">Academic Section</h1>
+                <p class="lead">Study Till You Live</p>
+                <hr>
+                <% if (session.role==null ) { %>
+                    <a class="btn btn-outline-info btn-lg" href="/signup" role="button">Register</a>
+                    <a class="btn btn-outline-info btn-lg" href="/login" role="button">Login</a>
+                    <br><br>
+                    <a class="btn btn-outline-info  btn-lg" href="/about-us" role="button">About Us</a>
+                    <% } %>
+                        <% if (session.role=='instructor' ) { %>
+                            <a class="btn btn-outline-info btn-lg" href="/addcourse" role="button">Add New Course</a>
+                            <a class="btn btn-outline-info btn-lg" href="/pending" role="button">Pending Approvals</a>
+                            <br><br>
+                            <% } %>
+                                <% if (session.role=='student' ) { %>
+                                    <a class="btn btn-outline-info btn-lg" href="/enrol" role="button">Enrol Courses</a>
+                                    <!-- <a class="btn btn-outline-info btn-lg" href="/pending" role="button">Pending
+                                    Approvals</a> -->
+                                    <br><br>
+                                    <% } %>
+            </div>
         </div>
-    </div>
 
-</body>
+    </body>
 
 </html>

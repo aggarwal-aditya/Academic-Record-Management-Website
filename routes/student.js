@@ -26,19 +26,24 @@ router.post('/enrol', async (req, res) => {
     if (!course) {
         return res.status(404).send('No such course exists');
     } else {
-        // Insert the new user if they do not exist yet
-        ticket = new courseticket({
-            name: course.name,
-            code: course.code,
-            studentmail: req.session.email,
-            pendingat: course.instructormail,
-            status: 'Pending Instructor Approval'
+        if (!prevticket) {
+            ticket = new courseticket({
+                name: course.name,
+                code: course.code,
+                studentmail: req.session.email,
+                pendingat: course.instructormail,
+                status: 'Pending Instructor Approval'
 
-        });
-
-
-        await ticket.save();
-        res.send(ticket);
+            });
+            await ticket.save();
+            res.send(ticket);
+        }
+        else {
+            prevticket.status = 'Pending Instructor Approval';
+            prevticket.pendingat = course.instructormail;
+            await prevticket.save();
+            res.send(prevticket);
+        }
     }
 });
 

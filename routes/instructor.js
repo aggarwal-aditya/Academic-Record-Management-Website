@@ -46,7 +46,7 @@ router.get('/pending', async (req, res) => {
         tosend.push(tickets[i].toObject());
         tosend[i].studentname = studentname.name;
     }
-    res.render('approval.ejs', { courses: tosend, currentPage: currentPage });
+    res.render('approval.ejs', { courses: tosend, currentPage: currentPage, session: req.session });
 
     // return res.send(tosend);
 });

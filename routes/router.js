@@ -19,7 +19,10 @@ router.get('/', (req, res) => {
 });
 
 router.get('/addcourse', (req, res) => {
-    res.render('addcourse');
+    if (!req.session.role || req.session.role != 'instructor') {
+        return res.status(401).send("Unauthorised");
+    }
+    res.render('addcourse', { session: req.session });
 });
 
 

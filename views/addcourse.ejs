@@ -1,45 +1,50 @@
-<head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <link href="/css/styles.css" rel="stylesheet" type="text/css">
-</head>
-<div class="container mt-5">
-    <h1>Float New Course</h1>
+<%- include('base') %>
 
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="card">
-                <div class="card-body">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        <link href="/css/styles.css" rel="stylesheet" type="text/css">
+    </head>
 
-                    <form action="/addcourse" method="post">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-graduation-cap"></i>
-                                    </span>
+    <div class="container mt-5">
+        <h1>Float New Course</h1>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-body">
+
+                        <form action="/addcourse" method="post">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-graduation-cap"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" id="code" name="code"
+                                        placeholder="Course Code">
                                 </div>
-                                <input type="text" class="form-control" id="code" name="code" placeholder="Course Code">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text">
-                                        <i class="fas fa-book"></i>
-                                    </span>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-book"></i>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Course Name">
                                 </div>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Course Name">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" id="release-course" class="btn btn-primary">Release Course <i
-                                    class="fa fa-check"></i></button>
+                            <div class="form-group">
+                                <button type="submit" id="release-course" class="btn btn-primary">Release Course <i
+                                        class="fa fa-check"></i></button>
 
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

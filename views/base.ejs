@@ -19,6 +19,16 @@
             <h1><a href="/">Academic<span>Section</span></a></h1>
             <nav>
                 <a href="/" class="selected">Home</a>
+                <% if (session.role=='instructor' ) { %>
+                    <a href="/addcourse">Add Courses</a>
+                    <a href="/pending">Approvals</a>
+                    <% } %>
+                        <% if (session.role=='student' ) { %>
+                            <a href="/enrol">Enrol Courses</a>
+                            <% } %>
+                                <a href="/about-us">About Us</a>
+
+
             </nav>
 
             <% if (session.role!=null ) { %>
@@ -27,9 +37,23 @@
                         <p>Welcome <%= session.mail %>
                         </p>
                     </li>
-                    <li><a href="/logout" class="lightbox_trigger">Log Out</a></li>
+                    <li>
+                        <form action="/logout" method="post">
+                            <button type="submit" class="btn btn-light">Logout</button>
+                        </form>
+                    </li>
                 </ul>
                 <% } %>
+                    <% if (session.role==null ) { %>
+                        <ul>
+                            <li>
+                                <a href="/signup">Register</a>
+                            </li>
+                            <li>
+                                <a href="/login">Login</a>
+                            </li>
+                        </ul>
+                        <% } %>
         </div>
     </header>
 </body>

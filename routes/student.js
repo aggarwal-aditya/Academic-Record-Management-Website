@@ -100,7 +100,7 @@ router.get('/enrol', async (req, res) => {
     for (i = 0; i < courses.length; i++) {
         filteredcourses.push(courses[i].toObject());
     }
-    res.render('enrol.ejs', { courses: filteredcourses, currentPage: currentPage });
+    res.render('enrol.ejs', { courses: filteredcourses, currentPage: currentPage, session: req.session });
 });
 
 

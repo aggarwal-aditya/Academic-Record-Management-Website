@@ -101,6 +101,10 @@ router.post('/register', (req, res) => {
     });
 });
 
+router.post('/logout', async (req, res) => {
+    req.session.destroy();
+    return res.redirect('/');
+});
 
 
 //Helper Functions

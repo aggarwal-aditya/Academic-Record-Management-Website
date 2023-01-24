@@ -7,7 +7,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login', { session: req.session });
 });
 
 router.get('/otp-verification', (req, res) => {

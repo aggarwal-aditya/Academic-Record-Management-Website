@@ -19,7 +19,8 @@ router.post('/addcourse', async (req, res) => {
     // Check if this user already exisits
     let course = await Course.findOne({ code: req.body.code });
     if (course) {
-        return res.status(400).send('Course already Exists');
+        // return res.status(400).send('Course already Exists');
+        return res.render('status', { session: req.session, message: { type: 'alert', text: 'Course Already Exists' } });
     } else {
         // Insert the new user if they do not exist yet
         course = new Course({
@@ -29,7 +30,8 @@ router.post('/addcourse', async (req, res) => {
 
         });
         await course.save();
-        res.send(course);
+        // res.send(course);
+        return res.render('status', { session: req.session, message: { type: 'success', text: 'Course Released Successfully' } });
     }
 });
 router.get('/pending', async (req, res) => {
@@ -75,7 +77,8 @@ router.post('/approve', async (req, res) => {
         ticket.status = 'Enrolled';
         await ticket.save();
     }
-    return res.send(ticket);
+    // return res.send(ticket);
+    return res.redirect('/pending');
 });
 
 router.post('/reject', async (req, res) => {
@@ -105,7 +108,8 @@ router.post('/reject', async (req, res) => {
         ticket.status = 'Advisor Rejected';
         await ticket.save();
     }
-    return res.send(ticket);
+    // return res.send(ticket);
+    return res.redirect('/pending');
 });
 
 

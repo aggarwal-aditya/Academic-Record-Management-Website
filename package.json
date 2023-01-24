@@ -21,6 +21,7 @@
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.4",
     "nodemailer": "^6.9.0",
+    "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "pg": "^8.8.0"
   }

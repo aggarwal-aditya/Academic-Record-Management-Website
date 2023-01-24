@@ -19,7 +19,9 @@ router.post('/enrol', async (req, res) => {
     let prevticket = await courseticket.findOne({ code: req.body.code, studentmail: req.session.email });
     if (prevticket) {
         if (prevticket.status != 'Dropped by Student') {
-            return res.status(400).send('Already Enrolled');
+            // return res.status(400).send('Already Enrolled');
+            return res.render('status', { session: req.session, message: { type: 'info', text: 'Already Enrolled' } });
+
         }
         // await prevticket.delete();
     }
@@ -36,13 +38,15 @@ router.post('/enrol', async (req, res) => {
 
             });
             await ticket.save();
-            res.send(ticket);
+            // res.send(ticket);
+            return res.render('status', { session: req.session, message: { type: 'success', text: 'Enrollment Requested' } });
         }
         else {
             prevticket.status = 'Pending Instructor Approval';
             prevticket.pendingat = course.instructormail;
             await prevticket.save();
-            res.send(prevticket);
+            // res.send(prevticket);
+            return res.render('status', { session: req.session, message: { type: 'success', text: 'Enrollment Requested' } });
         }
     }
 });
@@ -69,19 +73,21 @@ router.post('/drop', async (req, res) => {
     }
     let ticket = await courseticket.findOne({ code: req.body.code, studentmail: req.session.email });
     if (!ticket) {
-        return res.status(404).send('You are not enrolled in this course');
+        // return res.status(404).send('You are not enrolled in this course');
+        return res.render('status', { session: req.session, message: { type: 'alert', text: 'You are not enrolled in this course' } });
     }
     else if (ticket.studentmail != req.session.email) {
         return res.status(401).send("Unauthorised");
     }
     else if (ticket.status == 'Dropped by Student') {
-        return res.status(400).send('Already Dropped');
+        // return res.status(400).send('Already Dropped');
+        return res.render('status', { session: req.session, message: { type: 'info', text: 'Already Dropped' } });
     }
     ticket.status = "Dropped by Student";
     ticket.pendingat = "admin";
     ticket.save();
     // return res.send(ticket);
-    return res.redirect('/enrol');
+    return res.render('status', { session: req.session, message: { type: 'success', text: 'Course Dropped' } });
 
 });
 

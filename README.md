@@ -7,10 +7,16 @@ Run node app.js
 To Contribute
 
 / home page
+
 /login login page
+
 /otp-verification OTP Verification Page
+
+
 /pending Shows Approve or Reject for Instructor[Advisor]
+
 /enrol Shows list of courses to students for enrollment/Drop
+
 /addcourse Form for floating new course
 
 

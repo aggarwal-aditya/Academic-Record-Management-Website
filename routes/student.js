@@ -80,7 +80,8 @@ router.post('/drop', async (req, res) => {
     ticket.status = "Dropped by Student";
     ticket.pendingat = "admin";
     ticket.save();
-    return res.send(ticket);
+    // return res.send(ticket);
+    return res.redirect('/enrol');
 
 });
 

@@ -25,6 +25,10 @@ router.get('/addcourse', (req, res) => {
     res.render('addcourse', { session: req.session });
 });
 
+router.get('/about-us', (req, res) => {
+    res.render('aboutus', { session: req.session })
+});
+
 
 
 

@@ -122,7 +122,7 @@ router.post('/reject', async (req, res) => {
     if (ticket.pendingat != req.session.email && offeredby != req.session.email && advisor != req.session.email) {
         return res.status(401).send("Unauthorised");
     }
-    if (ticket.status == 'Pending Instructor Approval' || offeredby == req.session.email) {
+    if (ticket.status == 'Pending Instructor Approval' || (offeredby == req.session.email && ticket.status != 'Pending Advisor Approval')) {
         ticket.pendingat = "Admin";
         ticket.status = 'Instructor Rejected';
         await ticket.save();

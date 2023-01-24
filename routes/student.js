@@ -110,5 +110,21 @@ router.get('/enrol', async (req, res) => {
     res.render('enrol.ejs', { courses: filteredcourses, currentPage: currentPage, session: req.session });
 });
 
+router.get('/mycourses', async (req, res) => {
+    if (!req.session.role || req.session.role != 'student') {
+        return res.status(401).send("Unauthorised");
+    }
+    const currentPage = parseInt(req.query.page || 1);
+    const tickets = await courseticket.find({});
+    filteredtickets = [];
+    for (i = 0; i < tickets.length; i++) {
+        if (tickets[i].studentmail == req.session.email) {
+            filteredtickets.push(tickets[i].toObject());
+        }
+    }
+    res.render('mycourses.ejs', { courses: filteredtickets, session: req.session, currentPage: currentPage });
+});
+
+
 
 module.exports = router;

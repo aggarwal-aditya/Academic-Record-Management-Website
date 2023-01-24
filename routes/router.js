@@ -29,6 +29,9 @@ router.get('/about-us', (req, res) => {
     res.render('aboutus', { session: req.session })
 });
 
+router.get('/signup', async (req, res) => {
+    return res.render('status', { session: req.session, message: { type: 'alert', text: 'No New Registration Allowed at the Moment' } });
+})
 
 
 

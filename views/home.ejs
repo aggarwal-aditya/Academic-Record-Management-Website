@@ -30,10 +30,13 @@
                         <% if (session.role=='instructor' ) { %>
                             <a class="btn btn-outline-info btn-lg" href="/addcourse" role="button">Add New Course</a>
                             <a class="btn btn-outline-info btn-lg" href="/pending" role="button">Pending Approvals</a>
+                            <a class="btn btn-outline-info btn-lg" href="/releasedcourses" role="button">My Courses</a>
                             <br><br>
                             <% } %>
                                 <% if (session.role=='student' ) { %>
                                     <a class="btn btn-outline-info btn-lg" href="/enrol" role="button">Enrol Courses</a>
+                                    <a class="btn btn-outline-info btn-lg" href="/mycourses" role="button">My
+                                        Courses</a>
                                     <!-- <a class="btn btn-outline-info btn-lg" href="/pending" role="button">Pending
                                     Approvals</a> -->
                                     <br><br>

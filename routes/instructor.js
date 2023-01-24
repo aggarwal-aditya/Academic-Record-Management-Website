@@ -53,6 +53,30 @@ router.get('/pending', async (req, res) => {
     // return res.send(tosend);
 });
 
+
+router.get('/releasedcourses', async (req, res) => {
+    if (!req.session.role || req.session.role != 'instructor') {
+        return res.status(401).send("Unauthorised");
+    }
+    const currentPage = parseInt(req.query.page || 1);
+    const courses = await Course.find({});
+    tosend = [];
+    for (i = 0; i < courses.length; i++) {
+        if (courses[i].instructormail == req.session.email) {
+            tosend.push(courses[i].toObject());
+        }
+    }
+    for (i = 0; i < tosend.length; i++) {
+        const tickets = await courseticket.find({ coursecode: tosend[i].code, status: 'Enrolled' });
+        tosend[i].enrolled = 0;
+        if (tickets) {
+            tosend[i].enrolled = tickets.length;
+        }
+
+    }
+    res.render('releasedcourses.ejs', { courses: tosend, currentPage: currentPage, session: req.session });
+});
+
 router.post('/approve', async (req, res) => {
     // First Validate The Request
     if (!req.session.role || req.session.role != 'instructor') {

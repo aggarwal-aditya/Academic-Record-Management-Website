@@ -66,8 +66,9 @@ router.get('/releasedcourses', async (req, res) => {
             tosend.push(courses[i].toObject());
         }
     }
+    // console.log(tosend)
     for (i = 0; i < tosend.length; i++) {
-        const tickets = await courseticket.find({ coursecode: tosend[i].code, status: 'Enrolled' });
+        const tickets = await courseticket.find({ code: tosend[i].code, status: 'Enrolled' });
         tosend[i].enrolled = 0;
         if (tickets) {
             tosend[i].enrolled = tickets.length;
